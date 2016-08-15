@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="ShoppingCart">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Apni Dukaan</title>
+        
+           <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+          <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+           <!--[if lt IE 9]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
+     </head>
+    <body >
+         <div id="site-name"><h1>Apni Dukaan</h1></div>
+        <section id="main-wrapper" ng-controller="StockController" >
+            <div id="top-bar">
+               ITEMS
+                <div id="cart" >
+                     <span ng-click="showSelectedItems=!showSelectedItems">Selected Items({{NoOfSelectedItems}})</span>
+                    <span ng-click="$rootScope.cartShown=true">CART({{NoOfItems}})</span>
+                 </div>
+                  <div class="selected-items" ng-show="showSelectedItems&&SelectedItems.length>0">
+                   <h5>Selected Items are:</h5>
+                      <table>
+                      <thead>
+                          <tr><td>Item</td><td>Quantity</td><td>Remove</td>
+                          </tr>
+                      </thead>
+                  
+                          <tbody>
+                               <tr ng-repeat="Item in SelectedItems">
+                       <td>{{Item.ItemId}} </td><td>{{Item.Quantity}}</td>
+                       <td> <button ng-click="removeSelectedItem(Item.ItemId)">X</button></td>
+                       </tr>
+                          </tbody>
+                          </table>
+                      <button ng-click="addSelectedItemsToCart()">Add seletion to cart</button>
+                  </div>
+            </div>
+        
+         
+            <div id="items-container">
+            <div ng-repeat="Item in StockItems" class="item">
+                <div class="left">
+            <img src="{{Item.image}}" alt="{{Item.ItemId}}">
+                    </div>
+                <div class="right">
+                    <h2 class="text-name">{{Item.Name}}</h2>
+                    <hr/>
+                    <span class="text-label">Description:</span> <br>
+                    <span class="text-description">{{Item.description}}</span>
+                    <hr/>
+                    <span class="text-label">Quantity:</span>
+                    <input type="number" min="1" max="10" value="1" id="qty{{Item.ItemId}}"><br/><br/>
+                     <button class="btn btn-large" ng-click='addToSelectedItems(Item.ItemId)'>Add To Select List</button>
+                     <button class="btn btn-large" ng-click='Item.InCart=true;addItem(Item.ItemId)' >Add To Cart</button> <hr>
+                     </div>
+              </div>
+            </div>
+   
+               <div id="mycart-wrapper" ng-show="$rootScope.cartShown">
+                   <div id="mycart" ng-controller="CartController" >
+                       <h4>My Cart</h4>
+                       <table>
+                       <thead><tr><td>Item</td><td>Quantity</td><td>Update</td><td>Remove</td></tr></thead>
+                           <tbody>
+                               <tr ng-repeat="Item in Items">
+                      <td>{{Item.ItemId}} </td> <td>{{Item.Quantity}}</td>
+                                   <td>
+                           <input type="text" ng-model="Item.Quantity" ng-change="quantityChanged(Item.ItemId,Item.Quantity)"/>
+                        </td><td>
+                           <button ng-click="remove(Item.ItemId)">X</button>
+                                    </td>
+                       </tr>
+                           </tbody>
+                       </table>
+                       <div id="class"><button ng-click="clearCart()">Clear Cart</button></div>
+                        <button ng-click="$rootScope.cartShown=false" class="close">X</button>
+                   </div>
+               </div>
+          </section>
+        <script src="assets/js/angular.js"></script>
+        <script src="assets/js/cart.js"></script>
+        <script src="assets/js/service.js"></script>
+        <script src="assets/js/controller.js"></script>
+    </body>
+</html>
