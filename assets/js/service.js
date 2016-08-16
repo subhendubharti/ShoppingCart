@@ -1,19 +1,18 @@
 var cs=angular.module('services.cart', []);
-cs.service('Reviewer', ['$rootScope', function ($rootScope) {
+cs.service('Reviewer', ['$rootScope','$q', function ($rootScope,$q) {
     var review = function (cart) {
         var c = cart;
-        var promise = new Promise(function (resolve, reject) {
+        var deferred=$q.defer();
             try {
                 if (c.length>0) {
-                    resolve("Can be saved");
+                    deferred.resolve("Can be added");
                     }else{
-                        reject("Nothing to add")
+                        deferred.reject("Nothing to add")
                     }
             } catch (exception) {
-                reject("Some Error Occured");
+                deferred.reject("Some Error Occured");
             }
-        });
-        return promise;
+         return deferred.promise;
     }
     this.review = review;
 } ]);
@@ -57,7 +56,7 @@ cs.service('Cart', ['$rootScope', 'Reviewer', function ($rootScope, Reviewer) {
 
     var save = function () {
         Reviewer.review(cart).then(function (data) {
-            //alert("can be saved" + cart.length);
+           //alert("can be saved"+data);
             persist();
         }, function (error) {
             alert(error);
@@ -119,4 +118,5 @@ cs.service('Cart', ['$rootScope', 'Reviewer', function ($rootScope, Reviewer) {
     this.changeQuantity = changeQuantity;
     this.refresh = refresh;
 } ]);
+
 
